@@ -1,6 +1,6 @@
 <?php
 /*
- *
+ * configuration options for the ORCID API
  */
 
 // Local app configuration
@@ -27,16 +27,16 @@ require_once('oauth-client-secret.php');
 ////////////////////////////////////////////////////////////////////////
 
 // Sandbox - Member API
-define('OAUTH_AUTHORIZATION_URL', 'https://sandbox.orcid.org/oauth/authorize');//authorization endpoint
-define('OAUTH_TOKEN_URL', 'https://api.sandbox.orcid.org/oauth/token'); //token endpoint
+//define('OAUTH_AUTHORIZATION_URL', 'https://sandbox.orcid.org/oauth/authorize');//authorization endpoint
+//define('OAUTH_TOKEN_URL', 'https://sandbox.orcid.org/oauth/token'); //token endpoint
 
 // Sandbox - Public API
 //define('OAUTH_AUTHORIZATION_URL', 'https://sandbox.orcid.org/oauth/authorize');//authorization endpoint
 //define('OAUTH_TOKEN_URL', 'https://pub.sandbox.orcid.org/oauth/token');//token endpoint
 
 // Production - Member API
-//define('OAUTH_AUTHORIZATION_URL', 'https://orcid.org/oauth/authorize');//authorization endpoint
-//define('OAUTH_TOKEN_URL', 'https://api.orcid.org/oauth/token'); //token endpoint
+define('OAUTH_AUTHORIZATION_URL', 'https://orcid.org/oauth/authorize');//authorization endpoint
+define('OAUTH_TOKEN_URL', 'https://orcid.org/oauth/token'); //token endpoint
 
 // Production - Public API
 //define('OAUTH_AUTHORIZATION_URL', 'https://orcid.org/oauth/authorize');//authorization endpoint
