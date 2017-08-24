@@ -15,7 +15,7 @@
     <![endif]-->
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://orcid.org/sites/default/files/images/orcid_16x16.png" />
+    <link rel="icon" type="image/png" href="icons/orcid_16x16.png" />
 </head>
 
 <body>
@@ -30,7 +30,7 @@
     // if user denies authorization send them to that page
     if (isset($_GET['error']) && $_GET['error'] == 'access_denied') {
         # error=access_denied&error_description=User%20denied%20access
-        header( 'Location: ' . OAUTH_REDIRECT_URI . 'oauth-deny.html' );
+        header( "Location: $home?denied" );
 
     // If an authorization code exists, fetch the access token
     } else if (isset($_GET['code'])) {
@@ -44,7 +44,7 @@
         $params = "client_id=" . OAUTH_CLIENT_ID
                 . "&client_secret=" . OAUTH_CLIENT_SECRET
                 . "&grant_type=authorization_code&code=" . $code
-                . "&redirect_uri=" . OAUTH_REDIRECT_URI . "oauth-redirect.php";
+                . "&redirect_uri=" . OAUTH_REDIRECT_URI;
 
         // Initialize cURL session
         $ch = curl_init();
@@ -111,6 +111,8 @@
                     error_log( "ORCID ERROR: $message" );
                     echo "--- AUTHSTORE FAILED: $message";
                 }
+                $oname = $response['name'];
+                $orcid = $response['orcid'];
             }
         } else {
             $message = "$JSONDB read error";
@@ -119,7 +121,8 @@
         }
     } else {
         error_log( "ORCID ERROR: ".OAUTH_TOKEN_URL." returned $code" );
-        echo "--- AUTHORIZATION FAILED: HTTP Response Code $code";
+        $message = "HTTP Response Code $code";
+        echo "--- AUTHORIZATION FAILED: $message";
     }
 
     // Close cURL session
@@ -138,9 +141,9 @@
 
     <div class="masthead">
       <ul class="nav nav-pills pull-right">
-        <li><a href="https://dra.american.edu/orcid/">Pilot Home</a></li>
-        <li><a href="https://orcid.org" target="_blank">About ORCID</a></li>
-        <li><a href="http://www.american.edu/library/">AU Library</a></li>
+        <li><a href="<?php echo $home; ?>">Pilot Home</a></li>
+        <li><a href="<?php echo $info; ?>" target="_blank">About ORCID</a></li>
+        <li><a href="<?php echo $audra;?>">AUDRA-IR</a></li>
       </ul>
       <h4 class="muted">ORCID @ American University Library</h4>
     </div>
@@ -150,22 +153,24 @@
     <div class="jumbotron">
         <h2>ORCiD Confirmation</h2>
         <br>
-<?php if (isset( $response )) { ?>
-        <p class="lead">Thanks, <?php echo $response['name']; ?>. You have authorized AU Library to:
+<?php if (isset( $orcid )) { ?>
+        <p class="lead">Thanks, <?php echo $name; ?>. You have authorized AU Library to:
     <?php echo $scope_list; ?>
         </p>
         <br> <br>
-        <p class="lead">Please keep track of your ORCID <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" class="logo" width='16' height='16' alt="iD"/>: <?php echo $response['orcid']; ?></p>
-        <a class="btn btn-large"  href="https://sandbox.orcid.org/my-orcid" target="_blank">Go to your ORCID record</a>
+        <p class="lead">Please keep track of your ORCID <img src="icons/orcid_16x16.png" class="logo" width='16' height='16' alt="iD"/> <a href="<?php echo $info.'/'.$orcid; ?>">orcid.org/<?php echo $orcid; ?></a></p>
+        <p>If you would like to disconnect your iD from the AU Library, please send a request to <a href="mailto:servicedesk@wrlc.org?subject=ORCID+Disconnect+Request:+<?php echo $orcid; ?>">ServiceDesk@wrlc.org</a>.</p>
 <?php } else { ?>
         <p class="lead">Sorry, it appears some problem has ocurred.</p>
+        <p>Please report this to <a href="mailto:servicedesk@wrlc.org?subject=ORCID+AUTH+FAILED:+<?php echo urlencode($message); ?>">ServiceDesk@wrlc.org</a>.</p>
 <?php } ?>
     </div>
 
     <hr>
 
     <div class="footer">
-        <a href="https://docs.google.com/document/d/1HygRQ6hqoElILQvGjxkgZ4cSS_Y4B4vbx59Ex0ApFB0/edit?usp=sharing" target="_blank">AU/WRLC ORCID Create-on-demand Pilot Project</a>
+        <img class="pull-right" src="icons/ORCID_Member_Web_170px.png">
+        <a href="<?php echo $project1pager; ?>" target="_blank">AU/WRLC ORCID Create-on-demand Pilot Project</a>
     </div>
 
 </div> <!-- /container -->
