@@ -31,6 +31,7 @@
     if (isset($_GET['error']) && $_GET['error'] == 'access_denied') {
         # error=access_denied&error_description=User%20denied%20access
         header( "Location: $home?denied" );
+        exit;
 
     // If an authorization code exists, fetch the access token
     } else if (isset($_GET['code'])) {
@@ -95,38 +96,35 @@
             }
             $scope_list .= "</ul>\n";
 
-        # For now, store responses in a json file
-        if ($json = file_get_contents( $JSONDB )) {
-            $dbarray = json_decode( $json );
-            if (is_null( $dbarray )) {
-                $message = "$JSONDB decode error (".json_last_error().")";
-                error_log( "ORCID ERROR: $message" );
-                echo "--- AUTHSTORE FAILED: $message";
-            } else {
-                # update $JSONDB
-                $dbarray->{$response['orcid']} = $response;
-                if (! file_put_contents( $JSONDB, json_encode( $dbarray, JSON_PRETTY_PRINT )."\n" ))
-                {
-                    $message = "$JSONDB write error (".json_last_error().")";
+            # For now, store responses in a json file
+            if ($json = file_get_contents( $JSONDB )) {
+                $dbarray = json_decode( $json );
+                if (is_null( $dbarray )) {
+                    $message = "$JSONDB decode error (".json_last_error().")";
                     error_log( "ORCID ERROR: $message" );
                     echo "--- AUTHSTORE FAILED: $message";
+                } else {
+                    # update $JSONDB
+                    $dbarray->{$response['orcid']} = $response;
+                    if (! file_put_contents( $JSONDB, json_encode( $dbarray, JSON_PRETTY_PRINT )."\n" ))
+                    {
+                        $message = "$JSONDB write error (".json_last_error().")";
+                        error_log( "ORCID ERROR: $message" );
+                        echo "--- AUTHSTORE FAILED: $message";
+                    }
+                    $oname = $response['name'];
+                    $orcid = $response['orcid'];
                 }
-                $oname = $response['name'];
-                $orcid = $response['orcid'];
+            } else {
+                $message = "$JSONDB read error";
+                error_log( "ORCID ERROR: $message" );
+                echo "--- AUTHSTORE FAILED: $message";
             }
         } else {
-            $message = "$JSONDB read error";
-            error_log( "ORCID ERROR: $message" );
-            echo "--- AUTHSTORE FAILED: $message";
+            error_log( "ORCID ERROR: ".OAUTH_TOKEN_URL." returned $code" );
+            $message = "HTTP Response Code $code";
+            echo "--- AUTHORIZATION FAILED: $message";
         }
-    } else {
-        error_log( "ORCID ERROR: ".OAUTH_TOKEN_URL." returned $code" );
-        $message = "HTTP Response Code $code";
-        echo "--- AUTHORIZATION FAILED: $message";
-    }
-
-    // Close cURL session
-    curl_close($ch);
 
     // If an authorization code doesn't exist, throw an error
     } else {
@@ -134,6 +132,9 @@
         error_log( "ORCID WARNING: $message" );
         echo "--- AUTHORIZATION FAILED: $message";
     }
+
+    // Close cURL session
+    curl_close($ch);
 
 ?>
 
@@ -143,7 +144,7 @@
       <ul class="nav nav-pills pull-right">
         <li><a href="<?php echo $home; ?>">Pilot Home</a></li>
         <li><a href="<?php echo $info; ?>" target="_blank">About ORCID</a></li>
-        <li><a href="<?php echo $audra;?>">AUDRA-IR</a></li>
+        <li><a href="<?php echo $repo; ?>">AUDRA-IR</a></li>
       </ul>
       <h4 class="muted">ORCID @ American University Library</h4>
     </div>
@@ -154,7 +155,7 @@
         <h2>ORCiD Confirmation</h2>
         <br>
 <?php if (isset( $orcid )) { ?>
-        <p class="lead">Thanks, <?php echo $name; ?>. You have authorized AU Library to:
+        <p class="lead">Thanks, <?php echo $oname; ?>. You have authorized AU Library to:
     <?php echo $scope_list; ?>
         </p>
         <br> <br>
@@ -170,7 +171,7 @@
 
     <div class="footer">
         <img class="pull-right" src="icons/ORCID_Member_Web_170px.png">
-        <a href="<?php echo $project1pager; ?>" target="_blank">AU/WRLC ORCID Create-on-demand Pilot Project</a>
+        <a href="<?php echo $docs; ?>" target="_blank">AU/WRLC ORCID Create-on-demand Pilot Project</a>
     </div>
 
 </div> <!-- /container -->

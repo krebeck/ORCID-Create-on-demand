@@ -23,9 +23,11 @@
 <?php
     require_once('../config.php');
     $denied = isset($_GET['denied']);
-    $authZurl = OAUTH_AUTHORIZATION_URL . '?client_id=' . OAUTH_CLIENT_ID
-              . '&response_type=code&scope=/read-limited%20/activities/update&redirect_uri='
-              . OAUTH_REDIRECT_URI;
+    $oauURL = OAUTH_AUTHORIZATION_URL
+            . '?client_id=' . OAUTH_CLIENT_ID
+            . '&response_type=code&scope=/read-limited%20/activities/update'
+            . '&redirect_uri=' . OAUTH_REDIRECT_URI;
+    $aladin = $sp_url . '?institution=au&url=' . urlencode($oauURL);
 ?>
 
     <div class="container-narrow">
@@ -34,7 +36,7 @@
         <ul class="nav nav-pills pull-right">
           <li class="active"><a href="<?php echo $home; ?>">Pilot Home</a></li>
           <li><a href="<?php echo $info; ?>" target="_blank">About ORCID</a></li>
-          <li><a href="<?php echo $audra;?>">AUDRA-IR</a></li>
+          <li><a href="<?php echo $repo;?>">AUDRA-IR</a></li>
         </ul>
         <h4 class="muted">ORCID @ American University Library</h4>
       </div>
@@ -66,7 +68,7 @@
         <p>Click the button below to create an ORCID iD (if you don't already have one) and connect it to the American University Library.
 <?php } ?>
         <br>
-        <a class="btn btn-large" href="<?php echo $authZurl; ?>">
+        <a class="btn btn-large" href="<?php echo $aladin; ?>">
           <img id="orcid-id-logo" src="icons/orcid_24x24.png" width='24' height='24' alt="ORCID logo"/>
           Create/Connect ORCID iD</a>
         </p>
@@ -78,7 +80,7 @@
 
       <div class="footer">
         <img class="pull-right" src="icons/ORCID_Member_Web_170px.png">
-        <a href="<?php echo $project1pager; ?>" target="_blank">AU/WRLC ORCID Create-on-demand Pilot Project</a>
+        <a href="<?php echo $docs; ?>" target="_blank">AU/WRLC ORCID Create-on-demand Pilot Project</a>
       </div>
 
     </div> <!-- /container -->
