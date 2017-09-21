@@ -4,7 +4,7 @@
  */
 
 // Local app configuration
-$log_debug = true; // where will this go on an Apache server?
+$log_debug = true; // debug/error logging in apache2 error.log
 $JSONDB = '../db.json';
 
 # Use response scope to display human-readable authorizations
@@ -13,13 +13,15 @@ $scope_desc['/read-limited'] = "Read your limited-access information";
 $scope_desc['/activities/update'] = "Add or update your research activities";
 $scope_desc['/person/update'] = "Add or update your personal information";
 
+# web page navigation
 $home = "https://dra.american.edu/orcid/";
-#$home = "https://api-stage.wrlc.org/orcid/";
 $info = "https://orcid.org";
-#$info = "https://sandbox.orcid.org";
-$audra= "http://dra.american.edu/audra-ir";
+$repo = "http://dra.american.edu/audra-ir";
+$docs = "https://docs.google.com/document/d/1HygRQ6hqoElILQvGjxkgZ4cSS_Y4B4vbx59Ex0ApFB0/edit?usp=sharing";
 
-$project1pager = "https://docs.google.com/document/d/1HygRQ6hqoElILQvGjxkgZ4cSS_Y4B4vbx59Ex0ApFB0/edit?usp=sharing";
+# Service Provider endpoint
+#$sp_url = "https://aladin-sp.wrlc.org/simplesaml/wrlcauth/orcidlogin.php";
+$sp_url = "https://aladin-tst.wrlc.org/simplesaml/wrlcauth/orcidlogin.php";
 
 
 // ORCID API CREDENTIALS
