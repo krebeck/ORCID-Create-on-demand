@@ -1,0 +1,3 @@
+curl --cookie-jar ./cookies.txt -X POST -H "Content-Type: multipart/form-data" -F "name=admin" -F "pass=AUdgi2014" -F "form_id=user_login" -F "op=Log in" "http://auislandora-dev.wrlc.org/user/login"
+curl -b ./cookies.txt "http://auislandora-dev.wrlc.org/islandora/rest/v1/object/auislandora:73
+## if running the CURL requests from Islandora servers, must reference full path of curl as in /usr/bin/curl --verbose --cookie-jar ./cookies.txt -X POST -H "Content-Type: multipart/form-data" -F "name=admin" -F "pass=AUdgi2014" -F "form_id=user_login" -F "op=Log in" "http://auislandora-dev.wrlc.org/user/login" ##
